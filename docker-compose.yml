@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  # Archestra Platform - MCP-Native AI Platform
+  archestra:
+    image: archestra/platform:latest
+    container_name: devops-copilot-archestra
+    ports:
+      - "9000:9000"   # API
+      - "3000:3000"   # Admin UI
+    environment:
+      - ARCHESTRA_QUICKSTART=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - archestra-postgres-data:/var/lib/postgresql/data
+      - archestra-app-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # DevOps Copilot Dashboard
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: devops-copilot-dashboard
+    ports:
+      - "3001:3000"
+    environment:
+      - ARCHESTRA_API_URL=http://archestra:9000
+      - NODE_ENV=production
+    depends_on:
+      archestra:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  archestra-postgres-data:
+  archestra-app-data:

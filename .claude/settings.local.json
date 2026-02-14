@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.wemakedevs.org)",
+      "WebFetch(domain:archestra.ai)",
+      "WebFetch(domain:github.com)"
+    ]
+  }
+}
