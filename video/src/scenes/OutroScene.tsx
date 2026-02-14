@@ -66,16 +66,8 @@ export const OutroScene: React.FC = () => {
         }}
       >
         <AnimatedText
-          text="2 Fast 2 MCP Hackathon"
-          delay={45}
-          fontSize={22}
-          color={colors.muted}
-          fontWeight={500}
-        />
-
-        <AnimatedText
           text="github.com/lokeshsw2/Devops-Copilot"
-          delay={65}
+          delay={45}
           fontSize={18}
           color={colors.cyan}
           fontWeight={400}
