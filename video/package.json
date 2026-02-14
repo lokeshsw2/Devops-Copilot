@@ -1,0 +1,25 @@
+{
+  "name": "devops-copilot-demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npx remotion studio",
+    "build": "npx remotion render src/index.ts DemoVideo out/devops-copilot-demo.mp4",
+    "upgrade": "npx remotion upgrade"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.422",
+    "@remotion/cli": "4.0.422",
+    "@remotion/zod-types": "4.0.422",
+    "lucide-react": "^0.468.0",
+    "playwright": "^1.58.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.422"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}
