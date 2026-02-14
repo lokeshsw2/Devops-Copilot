@@ -106,7 +106,7 @@ export default function Home() {
               </span>
             </div>
             <a
-              href="https://github.com"
+              href="https://github.com/lokeshsw2/Devops-Copilot"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-400 transition-colors hover:border-zinc-700 hover:text-white"

@@ -4,24 +4,28 @@ import { colors } from "../theme";
 
 // Faithful recreation of the README architecture:
 //
-// ┌──────────── DevOps Copilot Dashboard ────────────┐
-// └──────────────────────┬───────────────────────────┘
-//                        │ API
-// ┌──────────────────────▼──── ARCHESTRA PLATFORM ───────────────┐
-// │  ┌──────────────── MCP Orchestrator (K8s) ────────────────┐  │
-// │  │  [Playwright MCP]   [GitHub MCP]   [Slack MCP]         │  │
-// │  └───────┬──────────────────┬──────────────┬──────────────┘  │
-// │  ┌───────▼──────────────────▼──────────────▼──────────────┐  │
-// │  │               AGENT PIPELINE                            │  │
-// │  │  Alert → Triage Agent → Root Cause Agent → Notification │  │
-// │  │                    ▼                                    │  │
-// │  │           Security Guardian                             │  │
-// │  │          (Dual-LLM Safety Gate)                         │  │
-// │  └────────────────────────────────────────────────────────┘  │
-// │  [Cost Controls] [Observability] [Security Policies] [Model] │
-// └──────────────────────────────────────────────────────────────┘
+// ┌────────────── DevOps Copilot Dashboard ──────────────┐
+// │           (Next.js • Real-time • Observability)       │
+// └──────────────────────┬───────────────────────────────┘
+//                        │ API (REST + A2A Protocol)
+// ┌──────────────────────▼──── ARCHESTRA PLATFORM ───────────────────┐
+// │  ┌──────── MCP Orchestrator (Embedded KinD K8s) ──────────────┐ │
+// │  │  [Playwright MCP]   [GitHub MCP]   [Slack MCP]              │ │
+// │  │    (Browser)         (Code+PRs)     (Alerts)                │ │
+// │  └───────┬──────────────────┬──────────────┬──────────────────┘ │
+// │  ┌───────▼──────────────────▼──────────────▼──────────────────┐ │
+// │  │            AGENT PIPELINE (A2A Protocol)                    │ │
+// │  │  Alert → Triage Agent → Root Cause Agent → Notification     │ │
+// │  │         (gpt-4o-mini)   (claude-opus-4.6)                   │ │
+// │  │                    ▼                                        │ │
+// │  │           Security Guardian                                 │ │
+// │  │          (Dual-LLM Safety Gate)                             │ │
+// │  └────────────────────────────────────────────────────────────┘ │
+// │  [Cost Controls] [Observability] [Security Policies] [Model]    │
+// │  [LLM Proxy]     [MCP Registry]  [A2A Protocol]  [Secrets Mgr] │
+// └─────────────────────────────────────────────────────────────────┘
 //        │                  │                  │
-//   [Grafana/Datadog]  [GitHub Repos]    [Slack Channels]
+//   [Grafana/Datadog/K8s] [GitHub Repos]  [Slack Channels & Alerts]
 
 interface ArrowConfig {
   fromX: number;
@@ -215,19 +219,20 @@ const FlowLabel: React.FC<{
 };
 
 export const ArchitectureDiagram: React.FC = () => {
-  // Y positions
+  // Y positions — compressed to fit 2 feature rows + external services
   const dashY = 0;
-  const archestraY = 90;
-  const archestraH = 620;
+  const archestraY = 80;
+  const archestraH = 660;
   const mcpOrchY = archestraY + 35;
-  const mcpOrchH = 130;
-  const mcpY = mcpOrchY + 40;
-  const pipelineY = archestraY + 195;
-  const pipelineH = 260;
-  const agentY = pipelineY + 55;
-  const guardianY = pipelineY + 160;
-  const featuresY = archestraY + 480;
-  const extY = archestraY + archestraH + 30;
+  const mcpOrchH = 120;
+  const mcpY = mcpOrchY + 38;
+  const pipelineY = archestraY + 180;
+  const pipelineH = 240;
+  const agentY = pipelineY + 50;
+  const guardianY = pipelineY + 148;
+  const feat1Y = archestraY + 440;  // Row 1: Cost Controls, Observability, Security Policies, Model Routing
+  const feat2Y = archestraY + 495;  // Row 2: LLM Proxy, MCP Registry, A2A Protocol, Secrets Manager
+  const extY = archestraY + archestraH + 25;
 
   // X positions for MCP 3-column layout
   const mcpCol1 = 280;
@@ -237,28 +242,31 @@ export const ArchitectureDiagram: React.FC = () => {
 
   // Agent pipeline: 4 boxes in a clear horizontal flow
   // Alert → Triage Agent → Root Cause Agent → Notification
-  const pipeLeft = 270;
-  const pipeRight = 1550;
   const alertW = 140;
   const agentW = 300;
   const notifW = 200;
-  const gap = 30; // gap between boxes for arrows
-  // Total = 140 + 30 + 300 + 30 + 300 + 30 + 200 = 1030
-  // Center within pipeline: (1340 - 1030) / 2 + 240 = 395
+  const gap = 30;
   const flowStartX = 310;
   const alertX = flowStartX;
   const triageX = alertX + alertW + gap;
   const rootCauseX = triageX + agentW + gap;
   const notifX = rootCauseX + agentW + gap;
-  const agentMidY = agentY + 25; // vertical center of agent boxes
+  const agentMidY = agentY + 25;
+
+  // Feature box layout — 4 columns evenly spaced
+  const featX1 = 260;
+  const featX2 = 520;
+  const featX3 = 780;
+  const featX4 = 1040;
+  const featW = 220;
 
   const arrows: ArrowConfig[] = [
     // Dashboard → Archestra
-    { fromX: CX, fromY: dashY + 60, toX: CX, toY: archestraY, delay: 8, color: colors.blue },
+    { fromX: CX, fromY: dashY + 55, toX: CX, toY: archestraY, delay: 8, color: colors.blue },
     // MCP servers → Agent Pipeline (vertical through orchestrator bottom)
-    { fromX: mcpCol1 + mcpColW / 2, fromY: mcpY + 52, toX: mcpCol1 + mcpColW / 2, toY: pipelineY, delay: 48, color: colors.cyan },
-    { fromX: mcpCol2 + mcpColW / 2, fromY: mcpY + 52, toX: mcpCol2 + mcpColW / 2, toY: pipelineY, delay: 50, color: colors.cyan },
-    { fromX: mcpCol3 + mcpColW / 2, fromY: mcpY + 52, toX: mcpCol3 + mcpColW / 2, toY: pipelineY, delay: 52, color: colors.cyan },
+    { fromX: mcpCol1 + mcpColW / 2, fromY: mcpY + 48, toX: mcpCol1 + mcpColW / 2, toY: pipelineY, delay: 48, color: colors.cyan },
+    { fromX: mcpCol2 + mcpColW / 2, fromY: mcpY + 48, toX: mcpCol2 + mcpColW / 2, toY: pipelineY, delay: 50, color: colors.cyan },
+    { fromX: mcpCol3 + mcpColW / 2, fromY: mcpY + 48, toX: mcpCol3 + mcpColW / 2, toY: pipelineY, delay: 52, color: colors.cyan },
     // Pipeline flow: Alert → Triage
     { fromX: alertX + alertW, fromY: agentMidY, toX: triageX, toY: agentMidY, delay: 64, color: colors.emerald },
     // Pipeline flow: Triage → Root Cause
@@ -266,7 +274,7 @@ export const ArchitectureDiagram: React.FC = () => {
     // Pipeline flow: Root Cause → Notification
     { fromX: rootCauseX + agentW, fromY: agentMidY, toX: notifX, toY: agentMidY, delay: 72, color: colors.emerald },
     // Agents down to Security Guardian
-    { fromX: (triageX + agentW / 2 + rootCauseX + agentW / 2) / 2, fromY: agentY + 55, toX: (triageX + agentW / 2 + rootCauseX + agentW / 2) / 2, toY: guardianY, delay: 78, color: colors.amber },
+    { fromX: (triageX + agentW / 2 + rootCauseX + agentW / 2) / 2, fromY: agentY + 52, toX: (triageX + agentW / 2 + rootCauseX + agentW / 2) / 2, toY: guardianY, delay: 78, color: colors.amber },
     // Archestra bottom → External services
     { fromX: mcpCol1 + mcpColW / 2, fromY: archestraY + archestraH, toX: mcpCol1 + mcpColW / 2, toY: extY, delay: 100, color: colors.muted },
     { fromX: mcpCol2 + mcpColW / 2, fromY: archestraY + archestraH, toX: mcpCol2 + mcpColW / 2, toY: extY, delay: 103, color: colors.muted },
@@ -274,11 +282,11 @@ export const ArchitectureDiagram: React.FC = () => {
   ];
 
   return (
-    <div style={{ position: "relative", width: 1920, height: 850 }}>
+    <div style={{ position: "relative", width: 1920, height: 870 }}>
       {/* 1. Containers (back to front) */}
       <Container x={200} y={archestraY} w={1420} h={archestraH} label="Archestra Platform" color={colors.violet} delay={5} />
-      <Container x={240} y={mcpOrchY} w={1340} h={mcpOrchH} label="MCP Orchestrator (K8s)" color={colors.cyan} delay={18} labelAlign="center" />
-      <Container x={240} y={pipelineY} w={1340} h={pipelineH} label="Agent Pipeline" color={colors.emerald} delay={55} />
+      <Container x={240} y={mcpOrchY} w={1340} h={mcpOrchH} label="MCP Orchestrator (Embedded KinD K8s)" color={colors.cyan} delay={18} labelAlign="center" />
+      <Container x={240} y={pipelineY} w={1340} h={pipelineH} label="Agent Pipeline (A2A Protocol)" color={colors.emerald} delay={55} />
 
       {/* 2. Arrows */}
       {arrows.map((a, i) => (
@@ -288,13 +296,13 @@ export const ArchitectureDiagram: React.FC = () => {
       {/* 3. Dashboard box */}
       <ABox x={CX - 240} y={dashY} w={480} label="DevOps Copilot Dashboard" sublabel={"Next.js \u00B7 Real-time \u00B7 Observability"} color={colors.blue} delay={0} />
 
-      {/* "API" label on arrow */}
-      <FlowLabel text="API" x={CX + 8} y={dashY + 65} color={colors.muted} delay={8} fontSize={12} />
+      {/* "API (REST + A2A Protocol)" label on arrow */}
+      <FlowLabel text="API (REST + A2A Protocol)" x={CX + 8} y={dashY + 58} color={colors.muted} delay={8} fontSize={11} />
 
       {/* 4. MCP Server boxes */}
-      <ABox x={mcpCol1} y={mcpY} w={mcpColW} label="Playwright MCP" sublabel="Browser Automation" color={colors.cyan} delay={28} />
-      <ABox x={mcpCol2} y={mcpY} w={mcpColW} label="GitHub MCP" sublabel="Code & PR Analysis" color={colors.cyan} delay={32} />
-      <ABox x={mcpCol3} y={mcpY} w={mcpColW} label="Slack MCP" sublabel="Team Notifications" color={colors.cyan} delay={36} />
+      <ABox x={mcpCol1} y={mcpY} w={mcpColW} label="Playwright MCP" sublabel="(Browser)" color={colors.cyan} delay={28} />
+      <ABox x={mcpCol2} y={mcpY} w={mcpColW} label="GitHub MCP" sublabel="(Code+PRs)" color={colors.cyan} delay={32} />
+      <ABox x={mcpCol3} y={mcpY} w={mcpColW} label="Slack MCP" sublabel="(Alerts)" color={colors.cyan} delay={36} />
 
       {/* 5. Agent pipeline flow: Alert → Triage → Root Cause → Notification */}
       <ABox x={alertX} y={agentY} w={alertW} label={"Alert"} color={colors.red} delay={60} fontSize={16} />
@@ -303,18 +311,24 @@ export const ArchitectureDiagram: React.FC = () => {
       <ABox x={notifX} y={agentY} w={notifW} label={"Notification"} color={colors.emerald} delay={72} fontSize={14} />
 
       {/* 6. Security Guardian below agents */}
-      <ABox x={CX - 200} y={guardianY} w={400} label="Security Guardian" sublabel={"Dual-LLM Safety Gate \u00B7 claude-opus-4.6"} color={colors.amber} delay={78} fontSize={18} sublabelSize={13} />
+      <ABox x={CX - 200} y={guardianY} w={400} label="Security Guardian" sublabel={"Dual-LLM Safety Gate"} color={colors.amber} delay={78} fontSize={17} sublabelSize={12} />
 
-      {/* 7. Feature boxes at bottom of Archestra */}
-      <ABox x={280} y={featuresY} w={200} label="Cost Controls" color={colors.emerald} delay={88} fontSize={14} />
-      <ABox x={520} y={featuresY} w={200} label="Observability" color={colors.cyan} delay={91} fontSize={14} />
-      <ABox x={760} y={featuresY} w={220} label="Security Policies" color={colors.amber} delay={94} fontSize={14} />
-      <ABox x={1020} y={featuresY} w={210} label="Model Routing" color={colors.violet} delay={97} fontSize={14} />
+      {/* 7. Feature boxes Row 1 */}
+      <ABox x={featX1} y={feat1Y} w={featW} label="Cost Controls" color={colors.emerald} delay={85} fontSize={13} />
+      <ABox x={featX2} y={feat1Y} w={featW} label="Observability" color={colors.cyan} delay={87} fontSize={13} />
+      <ABox x={featX3} y={feat1Y} w={featW} label="Security Policies" color={colors.amber} delay={89} fontSize={13} />
+      <ABox x={featX4} y={feat1Y} w={featW} label="Model Routing" color={colors.violet} delay={91} fontSize={13} />
 
-      {/* 8. External service boxes below Archestra */}
-      <ABox x={mcpCol1} y={extY} w={mcpColW} label="Grafana / Datadog / K8s" color={colors.muted} delay={100} fontSize={14} sublabelSize={11} />
+      {/* 8. Feature boxes Row 2 */}
+      <ABox x={featX1} y={feat2Y} w={featW} label="LLM Proxy" color={colors.blue} delay={93} fontSize={13} />
+      <ABox x={featX2} y={feat2Y} w={featW} label="MCP Registry" color={colors.cyan} delay={95} fontSize={13} />
+      <ABox x={featX3} y={feat2Y} w={featW} label="A2A Protocol" color={colors.emerald} delay={97} fontSize={13} />
+      <ABox x={featX4} y={feat2Y} w={featW} label="Secrets Manager" color={colors.amber} delay={99} fontSize={13} />
+
+      {/* 9. External service boxes below Archestra */}
+      <ABox x={mcpCol1} y={extY} w={mcpColW} label="Grafana / Datadog / K8s" color={colors.muted} delay={100} fontSize={14} />
       <ABox x={mcpCol2} y={extY} w={mcpColW} label="GitHub Repos & PRs" color={colors.muted} delay={103} fontSize={14} />
-      <ABox x={mcpCol3} y={extY} w={mcpColW} label="Slack Channels" color={colors.muted} delay={106} fontSize={14} />
+      <ABox x={mcpCol3} y={extY} w={mcpColW} label="Slack Channels & Alerts" color={colors.muted} delay={106} fontSize={14} />
     </div>
   );
 };
