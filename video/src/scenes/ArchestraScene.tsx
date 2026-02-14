@@ -36,12 +36,12 @@ const components: ComponentCard[] = [
       },
       {
         name: "Root Cause Analyzer",
-        detail: "claude-3.5-sonnet \u00B7 GitHub MCP, Playwright MCP",
+        detail: "claude-opus-4.6 \u00B7 GitHub MCP, Playwright MCP",
         color: colors.violet,
       },
       {
         name: "Security Guardian",
-        detail: "claude-3.5-sonnet \u00B7 None (validation only)",
+        detail: "claude-opus-4.6 \u00B7 None (validation only)",
         color: colors.amber,
       },
     ],

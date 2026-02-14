@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const modelColors: Record<string, string> = {
   "gpt-4o-mini": "bg-emerald-500",
-  "claude-3.5-sonnet": "bg-violet-500",
+  "claude-opus-4.6": "bg-violet-500",
   "gpt-4o": "bg-blue-500",
 };
 
@@ -78,7 +78,7 @@ export function CostPanel({
               Smart Model Routing Active
             </p>
             <p className="mt-0.5 text-xs text-zinc-500">
-              Using gpt-4o-mini for triage, claude-3.5-sonnet for analysis
+              Using gpt-4o-mini for triage, claude-opus-4.6 for analysis
             </p>
           </div>
           <div className="text-right">

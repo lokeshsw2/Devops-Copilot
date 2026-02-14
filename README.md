@@ -72,12 +72,12 @@ All orchestrated through **Archestra's MCP-native platform** with full observabi
 | Agent | Role | Model | MCP Tools |
 |-------|------|-------|-----------|
 | **Incident Triage** | First responder — detects anomalies, classifies severity, correlates deploys | gpt-4o-mini | Playwright, Slack |
-| **Root Cause Analyzer** | Deep investigation — analyzes code changes, identifies root cause | claude-3.5-sonnet | GitHub, Playwright |
-| **Security Guardian** | Safety gate — validates all actions against security policies | claude-3.5-sonnet | None (validation only) |
+| **Root Cause Analyzer** | Deep investigation — analyzes code changes, identifies root cause | claude-opus-4.6 | GitHub, Playwright |
+| **Security Guardian** | Safety gate — validates all actions against security policies | claude-opus-4.6 | None (validation only) |
 
 ### Smart Model Routing
 - **Triage** (high volume, fast): gpt-4o-mini ($0.15/1M tokens) — 96% cost reduction
-- **Deep Analysis** (complex reasoning): claude-3.5-sonnet — used only when needed
+- **Deep Analysis** (complex reasoning): claude-opus-4.6 — used only when needed
 - **Result**: Same quality, 96% lower cost than using GPT-4o for everything
 
 ---

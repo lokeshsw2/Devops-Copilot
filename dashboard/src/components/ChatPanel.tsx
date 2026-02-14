@@ -67,11 +67,11 @@ const PREDEFINED_RESPONSES: Record<string, { content: string; tools: string[] }>
       "| Model | Tokens | Cost | Share |\n" +
       "|-------|--------|------|-------|\n" +
       "| gpt-4o-mini | 284.5k | $4.27 | 62% |\n" +
-      "| claude-3.5-sonnet | 89.2k | $2.14 | 31% |\n" +
+      "| claude-opus-4.6 | 89.2k | $2.14 | 31% |\n" +
       "| gpt-4o | 12.1k | $0.48 | 7% |\n\n" +
       "**Total spend today:** $6.89\n" +
       "**Daily budget:** $10.00 (69% used)\n\n" +
-      "**Optimization:** Smart model routing uses gpt-4o-mini for initial triage (62% of calls) and only escalates to claude-3.5-sonnet for deep analysis. " +
+      "**Optimization:** Smart model routing uses gpt-4o-mini for initial triage (62% of calls) and only escalates to claude-opus-4.6 for deep analysis. " +
       "This saves **96% vs using GPT-4o for everything** ($6.89 vs ~$172).",
     tools: [],
   },
@@ -95,11 +95,11 @@ const PREDEFINED_RESPONSES: Record<string, { content: string; tools: string[] }>
       "- Status: Active | 847 actions | 96.2% success | 3.4s avg\n" +
       "- Tools: Playwright MCP, Slack MCP\n" +
       "- Role: First responder — scrapes dashboards, classifies severity, sends alerts\n\n" +
-      "**2. Root Cause Analyzer** (claude-3.5-sonnet)\n" +
+      "**2. Root Cause Analyzer** (claude-opus-4.6)\n" +
       "- Status: Active | 312 actions | 91.8% success | 8.7s avg\n" +
       "- Tools: GitHub MCP, Playwright MCP\n" +
       "- Role: Deep investigation — correlates code changes with incidents\n\n" +
-      "**3. Security Guardian** (claude-3.5-sonnet)\n" +
+      "**3. Security Guardian** (claude-opus-4.6)\n" +
       "- Status: Active | 124 actions | 100% success | 1.2s avg\n" +
       "- Tools: None (validation only)\n" +
       "- Role: Safety gate — blocks unsafe operations, prevents data exfiltration",

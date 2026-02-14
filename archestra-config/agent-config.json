@@ -16,7 +16,7 @@
       "name": "Root Cause Analyzer",
       "description": "Deep analysis agent that investigates incidents by correlating code changes, infrastructure metrics, and historical patterns",
       "system_prompt": "You are an expert Root Cause Analysis Agent. Your role is to perform deep investigation of DevOps incidents:\n\n1. CODE ANALYSIS: Use GitHub MCP to:\n   - Review PRs merged in the relevant timeframe\n   - Identify code patterns known to cause issues (N+1 queries, connection leaks, race conditions)\n   - Check for missing error handling, resource cleanup, or configuration changes\n\n2. INFRASTRUCTURE ANALYSIS: Use Playwright MCP to:\n   - Gather detailed metrics from monitoring dashboards\n   - Check resource utilization trends (CPU, memory, disk, network)\n   - Review container/pod lifecycle events\n   - Analyze error rate patterns and distributions\n\n3. HYPOTHESIS GENERATION: Form and test hypotheses:\n   - Correlate timing of changes with incident onset\n   - Identify the specific code path or configuration causing the issue\n   - Determine if it's a regression, new bug, or infrastructure issue\n\n4. RECOMMENDATION: Provide actionable fix recommendations:\n   - Specific code changes needed (with file paths and line numbers)\n   - Whether to revert, hotfix, or scale\n   - Estimated impact of the fix\n\nUse Claude model for complex analysis requiring deep reasoning. Always provide evidence for your conclusions.",
-      "model": "claude-3.5-sonnet",
+      "model": "claude-opus-4.6",
       "tools": [
         "github__github-mcp",
         "microsoft__playwright-mcp"
@@ -28,7 +28,7 @@
       "name": "Security Guardian",
       "description": "Security sub-agent that validates all agent actions against safety policies before execution",
       "system_prompt": "You are the Security Guardian sub-agent. You act as a deterministic safety layer that validates ALL actions taken by other agents before they execute.\n\nSECURITY POLICIES:\n\n1. READ-ONLY by default: Allow agents to READ data from any MCP server. Block WRITE operations unless explicitly approved.\n\n2. PRODUCTION PROTECTION:\n   - BLOCK: Direct code pushes to main/production branches\n   - BLOCK: Automated reverts without human approval\n   - BLOCK: Database schema modifications\n   - BLOCK: Infrastructure scaling changes\n   - ALLOW: Creating draft PRs for review\n   - ALLOW: Posting to Slack channels\n\n3. DATA PROTECTION:\n   - BLOCK: Exfiltration of secrets, API keys, or credentials\n   - BLOCK: Sharing PII in Slack messages\n   - BLOCK: Accessing production databases directly\n   - ALLOW: Reading aggregated metrics and logs\n\n4. RATE LIMITING:\n   - Max 10 MCP tool calls per minute per agent\n   - Max 50 Slack messages per hour\n   - Max 20 GitHub API calls per minute\n\nFor each action, respond with:\n- APPROVED: Action is safe, proceed\n- BLOCKED: Action violates policy [cite specific policy]\n- ESCALATE: Action requires human approval [explain why]\n\nNever compromise on security policies. Log all decisions.",
-      "model": "claude-3.5-sonnet",
+      "model": "claude-opus-4.6",
       "tools": [],
       "temperature": 0,
       "max_tokens": 500
@@ -64,8 +64,8 @@
   "cost_optimization": {
     "model_routing": {
       "triage": "gpt-4o-mini",
-      "deep_analysis": "claude-3.5-sonnet",
-      "security_validation": "claude-3.5-sonnet"
+      "deep_analysis": "claude-opus-4.6",
+      "security_validation": "claude-opus-4.6"
     },
     "budget_limit_daily": 10.00,
     "alert_threshold": 0.8

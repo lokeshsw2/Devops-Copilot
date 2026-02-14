@@ -8,7 +8,7 @@ export const OutroScene: React.FC = () => {
   const frame = useCurrentFrame();
 
   // Fade to black at the end
-  const fadeOut = interpolate(frame, [150, 180], [0, 1], {
+  const fadeOut = interpolate(frame, [700, 780], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -74,7 +74,7 @@ export const OutroScene: React.FC = () => {
         />
 
         <AnimatedText
-          text="github.com/arhestra/devops-copilot"
+          text="github.com/lokeshsw2/Devops-Copilot"
           delay={65}
           fontSize={18}
           color={colors.cyan}

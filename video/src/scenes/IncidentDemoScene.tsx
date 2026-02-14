@@ -55,13 +55,13 @@ export const IncidentDemoScene: React.FC = () => {
   });
 
   // Agent activation pulse
-  const agentActivateOpacity = interpolate(frame, [50, 65], [0, 1], {
+  const agentActivateOpacity = interpolate(frame, [30, 42], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
   // Root cause box
-  const rootCauseDelay = 340;
+  const rootCauseDelay = 220;
   const rootCauseOpacity = interpolate(
     frame - rootCauseDelay,
     [0, 20],
@@ -180,8 +180,8 @@ export const IncidentDemoScene: React.FC = () => {
         <div style={{ flex: 1 }}>
           <IncidentTimeline
             steps={timelineSteps}
-            startDelay={80}
-            stepInterval={50}
+            startDelay={50}
+            stepInterval={30}
           />
         </div>
 

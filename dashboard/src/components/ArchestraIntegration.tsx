@@ -28,7 +28,7 @@ const features = [
     icon: <Gauge className="h-5 w-5 text-emerald-400" />,
     title: "Cost Optimization",
     description:
-      "Dynamic model routing: gpt-4o-mini for triage ($0.15/1M), claude-3.5-sonnet for deep analysis. 96% cost reduction.",
+      "Dynamic model routing: gpt-4o-mini for triage ($0.15/1M), claude-opus-4.6 for deep analysis. 96% cost reduction.",
     active: true,
   },
 ];

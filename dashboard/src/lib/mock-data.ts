@@ -79,7 +79,7 @@ export const incidents: Incident[] = [
         blockedReason:
           "Security policy: Production code modifications require human approval",
         tokenCost: 120,
-        model: "claude-3.5-sonnet",
+        model: "claude-opus-4.6",
       },
     ],
     rootCause:
@@ -268,7 +268,7 @@ export const agentConfigs: AgentConfig[] = [
       "github__github-mcp",
       "microsoft__playwright-mcp",
     ],
-    model: "claude-3.5-sonnet",
+    model: "claude-opus-4.6",
     totalActions: 312,
     successRate: 91.8,
     avgResponseTime: 8.7,
@@ -279,7 +279,7 @@ export const agentConfigs: AgentConfig[] = [
     name: "Security Guardian",
     status: "active",
     mcpServers: [],
-    model: "claude-3.5-sonnet",
+    model: "claude-opus-4.6",
     totalActions: 124,
     successRate: 100,
     avgResponseTime: 1.2,
@@ -312,7 +312,7 @@ export const responseTimes: MetricPoint[] = Array.from(
 
 export const costBreakdown: CostBreakdown[] = [
   { model: "gpt-4o-mini", tokens: 284500, cost: 4.27, percentage: 62 },
-  { model: "claude-3.5-sonnet", tokens: 89200, cost: 2.14, percentage: 31 },
+  { model: "claude-opus-4.6", tokens: 89200, cost: 2.14, percentage: 31 },
   { model: "gpt-4o", tokens: 12100, cost: 0.48, percentage: 7 },
 ];
 

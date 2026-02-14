@@ -7,8 +7,8 @@ import { colors } from "../theme";
 
 const costSegments = [
   { label: "gpt-4o-mini (Triage)", value: 0.42, color: colors.emerald },
-  { label: "claude-3.5-sonnet (Analysis)", value: 2.18, color: colors.violet },
-  { label: "claude-3.5-sonnet (Security)", value: 1.84, color: colors.blue },
+  { label: "claude-opus-4.6 (Analysis)", value: 2.18, color: colors.violet },
+  { label: "claude-opus-4.6 (Security)", value: 1.84, color: colors.blue },
 ];
 
 const breakdownItems = [
@@ -201,7 +201,7 @@ export const CostScene: React.FC = () => {
           />
           <div>
             <div style={{ fontSize: 16, fontWeight: 600, color: colors.text }}>
-              gpt-4o-mini \u2192 Triage
+              {"gpt-4o-mini \u2192 Triage"}
             </div>
             <div style={{ fontSize: 13, color: colors.muted }}>
               Fast, cheap for initial classification
@@ -230,7 +230,7 @@ export const CostScene: React.FC = () => {
           />
           <div>
             <div style={{ fontSize: 16, fontWeight: 600, color: colors.text }}>
-              claude-3.5-sonnet \u2192 Analysis
+              {"claude-opus-4.6 \u2192 Analysis"}
             </div>
             <div style={{ fontSize: 13, color: colors.muted }}>
               Deep reasoning for root cause

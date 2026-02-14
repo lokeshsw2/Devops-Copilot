@@ -156,7 +156,7 @@ const simulatedActions: Record<string, AgentAction[]> = {
       blockedReason:
         "Security policy: WAF/firewall rule modifications require human approval from security team",
       tokenCost: 150,
-      model: "claude-3.5-sonnet",
+      model: "claude-opus-4.6",
     },
   ],
 };

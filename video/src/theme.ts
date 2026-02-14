@@ -19,6 +19,6 @@ export const colors = {
 };
 
 export const FPS = 30;
-export const TOTAL_DURATION = 7200; // ~4 minutes at 30fps
+export const TOTAL_DURATION = 5400; // 3 minutes at 30fps
 export const WIDTH = 1920;
 export const HEIGHT = 1080;
