@@ -168,6 +168,7 @@ const QUICK_ACTIONS = [
 export function ChatPanel({ incidents }: { incidents: Incident[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLive, setIsLive] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -181,11 +182,23 @@ export function ChatPanel({ incidents }: { incidents: Incident[] }) {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Check if live mode is available
+  useEffect(() => {
+    fetch("/api/health")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.liveMode && (data.archestra?.connected || data.gemini?.configured)) {
+          setIsLive(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = (text?: string) => {
+  const sendMessage = async (text?: string) => {
     const msg = text || input.trim();
     if (!msg) return;
 
@@ -199,7 +212,33 @@ export function ChatPanel({ incidents }: { incidents: Incident[] }) {
     setInput("");
     setIsTyping(true);
 
-    // Simulate agent thinking
+    // Try live API first, fall back to mock
+    if (isLive) {
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg }),
+        });
+        const data = await res.json();
+        if (data.response && data.source !== "fallback") {
+          const assistantMsg: Message = {
+            id: `assistant-${Date.now()}`,
+            role: "assistant",
+            content: data.response,
+            timestamp: new Date(),
+            tools: data.source === "archestra-a2a" ? ["a2a-protocol"] : [],
+          };
+          setMessages((prev) => [...prev, assistantMsg]);
+          setIsTyping(false);
+          return;
+        }
+      } catch {
+        // Fall through to mock
+      }
+    }
+
+    // Mock response fallback
     setTimeout(() => {
       const response = matchResponse(msg);
       const assistantMsg: Message = {
@@ -244,7 +283,9 @@ export function ChatPanel({ incidents }: { incidents: Incident[] }) {
             <p className="text-sm font-semibold text-white">
               DevOps Copilot
             </p>
-            <p className="text-xs text-zinc-500">via Archestra MCP</p>
+            <p className="text-xs text-zinc-500">
+              {isLive ? "Live via Archestra" : "Demo Mode"}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-1">

@@ -1,17 +1,28 @@
 import { NextResponse } from "next/server";
 import { incidents, dashboardStats } from "@/lib/mock-data";
-
-const ARCHESTRA_API_URL =
-  process.env.ARCHESTRA_API_URL || "http://localhost:9000";
+import { isLiveMode, checkHealth, getChatHistory } from "@/lib/archestra-client";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const severity = searchParams.get("severity");
   const status = searchParams.get("status");
 
-  // In production, this would fetch from Archestra API
-  // Example: const res = await fetch(`${ARCHESTRA_API_URL}/v1/agents/incidents`);
+  // Live mode: fetch real chat/agent history from Archestra
+  if (isLiveMode()) {
+    const healthy = await checkHealth();
+    if (healthy) {
+      const history = await getChatHistory(50);
+      if (history) {
+        return NextResponse.json({
+          incidents: history,
+          stats: dashboardStats,
+          source: "archestra-live",
+        });
+      }
+    }
+  }
 
+  // Mock data with filtering
   let filtered = incidents;
 
   if (severity && severity !== "all") {
@@ -24,5 +35,6 @@ export async function GET(request: Request) {
   return NextResponse.json({
     incidents: filtered,
     stats: dashboardStats,
+    source: "mock",
   });
 }
