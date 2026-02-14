@@ -81,7 +81,7 @@ export const DashboardScene: React.FC = () => {
   );
 
   // URL bar typing animation
-  const urlText = "localhost:3001";
+  const urlText = "devops-copilot-six.vercel.app";
   const typedChars = Math.min(
     urlText.length,
     Math.floor(
