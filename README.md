@@ -4,6 +4,8 @@
 
 > Autonomous DevOps agent that detects, diagnoses, and resolves infrastructure incidents using MCP-orchestrated AI agents — all secured by Archestra's dual-LLM safety layer.
 
+[![YouTube Demo](https://img.shields.io/badge/YouTube-Demo-red?logo=youtube)](https://www.youtube.com/watch?v=XzokGwxfadA&t=29s)
+
 ---
 
 ## The Problem
